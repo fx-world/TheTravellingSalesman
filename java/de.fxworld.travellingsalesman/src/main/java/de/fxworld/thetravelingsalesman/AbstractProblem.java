@@ -1,19 +1,20 @@
+package de.fxworld.thetravelingsalesman;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractProblem implements IProblem {
+public abstract class AbstractProblem<L> implements IProblem<L> {
 
-    private List<Location> locations;
+    private List<L> locations;
     private Path bestPath;
     private int locationsCount;
 
     public AbstractProblem() {}
 
-    public AbstractProblem(List<Location> locations) {
+    public AbstractProblem(List<L> locations) {
         setLocations(locations);
     }
 
-    protected void setLocations(List<Location> locations) {
+    protected void setLocations(List<L> locations) {
         if (this.locations == null) {
             this.locations = Collections.unmodifiableList(locations);
             this.locationsCount = locations.size();
@@ -23,7 +24,7 @@ public abstract class AbstractProblem implements IProblem {
     }
 
     @Override
-    public List<Location> getLocations() {
+    public List<L> getLocations() {
         return locations;
     }
 

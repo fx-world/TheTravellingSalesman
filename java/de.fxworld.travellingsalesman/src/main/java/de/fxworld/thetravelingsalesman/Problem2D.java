@@ -1,3 +1,4 @@
+package de.fxworld.thetravelingsalesman;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -5,11 +6,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Problem2D extends AbstractProblem implements IProblem {
+public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
 
     private double[][] distances;
 
-    public Problem2D(List<Location> locations, double[][] distances) {
+    public Problem2D(List<T> locations, double[][] distances) {
         super(locations);
         this.distances = distances;
     }
@@ -18,33 +19,30 @@ public class Problem2D extends AbstractProblem implements IProblem {
         super();
         this.distances = readGraph(path);
 
-        List<Location> locations = new ArrayList<>();
-        for (int i = 0; i < distances.length; i++) {
-            locations.add(new Location(i, "L" + i));
-        }
-        setLocations(locations);
+//        List<T> locations = new ArrayList<>();
+//        for (int i = 0; i < distances.length; i++) {
+//            locations.add("L" + i);
+//        }
+//        setLocations(locations);
     }
 
     /* (non-Javadoc)
      * @see IProblem#getDistance(Location, Location)
      */
     @Override
-    public double getDistance(Location from, Location to) {
-        //int fromIndex = locations.indexOf(from);
-        //int toIndex = locations.indexOf(to);
-        //return distances[fromIndex][toIndex];
-        return distances[from.index][to.index];
+    public double getDistance(int from, int to) {
+        return distances[from][to];
     }
 
     /* (non-Javadoc)
      * @see IProblem#calculateLength(java.util.List)
      */
     @Override
-    public double calculateLength(List<Location> path) {
+    public double calculateLength(int[] path) {
         double result = 0;
 
-        for (int i = 1; i < path.size(); i++) {
-            result += getDistance(path.get(i - 1), path.get(i));
+        for (int i = 1; i < path.length; i++) {
+            result += getDistance(path[i - 1], path[i]);
         }
 
         return result;
@@ -55,11 +53,11 @@ public class Problem2D extends AbstractProblem implements IProblem {
 
         for (Path path : paths) {
             double result = 0;
-            List<Location> locations = path.getLocations();
-            for (int i = 1; i < locations.size(); i++) {
-                Location from = locations.get(i - 1);
-                Location to = locations.get(i);
-                result += distances[from.index][to.index];
+            int[] locations = path.getLocations();
+            for (int i = 1; i < locations.length; i++) {
+            	int from = locations[i - 1];
+            	int to = locations[i];
+                result += distances[from][to];
             }
             path.setLength(result);
         }

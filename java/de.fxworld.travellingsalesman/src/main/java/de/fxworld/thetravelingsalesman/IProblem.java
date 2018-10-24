@@ -1,12 +1,13 @@
+package de.fxworld.thetravelingsalesman;
 import java.util.List;
 
-public interface IProblem {
+public interface IProblem<L> {
 
-    double getDistance(Location from, Location to);
+    double getDistance(int from, int to);
 
-    double calculateLength(List<Location> path);
+    double calculateLength(int[] path);
 
-    List<Location> getLocations();
+    List<L> getLocations();
 
     Path getBestPath();
 

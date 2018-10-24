@@ -1,3 +1,4 @@
+package de.fxworld.thetravelingsalesman;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -6,9 +7,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ParallelBranchBoundSolver implements ISolver {
+public class ParallelBranchBoundSolver<T> implements ISolver<T> {
 
-    private IProblem problem;
+    private IProblem<T> problem;
 
     private ThreadPoolExecutor pool;
 
@@ -18,11 +19,11 @@ public class ParallelBranchBoundSolver implements ISolver {
 
     private int threadCount;
 
-    public ParallelBranchBoundSolver(IProblem problem) {
+    public ParallelBranchBoundSolver(IProblem<T> problem) {
         this(problem, Runtime.getRuntime().availableProcessors() + 1);
     }
 
-    public ParallelBranchBoundSolver(IProblem problem, int threadCount) {
+    public ParallelBranchBoundSolver(IProblem<T> problem, int threadCount) {
         this.problem = problem;
         this.threadCount = threadCount;
         this.workQueue = new LinkedBlockingQueue<>();
@@ -52,11 +53,17 @@ public class ParallelBranchBoundSolver implements ISolver {
         return problem;
     }
 
-    protected void calculateShortestPath(IProblem problem) {
-        calculateShortestPath(problem, new Path(problem), problem.getLocations());
+    protected void calculateShortestPath(IProblem<T> problem) {
+    	List<Integer> leftToVisit = new ArrayList<Integer>();
+    	
+    	for (int i = 0; i < problem.getLocationsCount(); i++) {
+    		leftToVisit.add(i);
+    	}
+    	
+        calculateShortestPath(problem, new Path(problem), leftToVisit);
     }
 
-    protected void calculateShortestPath(IProblem problem, Path startPath, List<Location> leftToVisit) {
+    protected void calculateShortestPath(IProblem problem, Path startPath, List<Integer> leftToVisit) {
         if (leftToVisit.size() == 1) {
             Path path = startPath.to(leftToVisit.get(0));
             setBestPath(path);
@@ -65,7 +72,7 @@ public class ParallelBranchBoundSolver implements ISolver {
             List<Path> nextPaths = new ArrayList<>();
             Path globalBestPath = problem.getBestPath();
 
-            for (Location nextLocation : leftToVisit) {
+            for (Integer nextLocation : leftToVisit) {
                 Path nextPath = startPath.to(nextLocation);
 
                 if (globalBestPath == null || nextPath.getLength() < globalBestPath.getLength()) {
@@ -78,16 +85,16 @@ public class ParallelBranchBoundSolver implements ISolver {
 
             if (workQueue.size() < threadCount && problem.getLocationsCount() > startPath.getLocationsCount() * 2) {
                 for (Path nextPath : nextPaths) {
-                    List<Location> newLeftToVisit = new ArrayList<>(leftToVisit);
-                    Location nextLocation = nextPath.getLast();
+                    List<Integer> newLeftToVisit = new ArrayList<>(leftToVisit);
+                    Integer nextLocation = nextPath.getLast();
                     newLeftToVisit.remove(nextLocation);
 
                     pool.submit(() -> calculateShortestPath(problem, nextPath, newLeftToVisit));
                 }
             } else {
                 for (Path nextPath : nextPaths) {
-                    List<Location> newLeftToVisit = new ArrayList<>(leftToVisit);
-                    Location nextLocation = nextPath.getLast();
+                    List<Integer> newLeftToVisit = new ArrayList<>(leftToVisit);
+                    Integer nextLocation = nextPath.getLast();
                     newLeftToVisit.remove(nextLocation);
 
                     calculateShortestPath(problem, nextPath, newLeftToVisit);
