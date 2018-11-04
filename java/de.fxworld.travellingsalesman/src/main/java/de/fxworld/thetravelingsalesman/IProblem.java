@@ -1,21 +1,25 @@
 package de.fxworld.thetravelingsalesman;
 import java.util.List;
 
+import de.fxworld.thetravelingsalesman.impl.DoublePath;
+
 public interface IProblem<L> {
-
-    double getDistance(int from, int to);
-
-    double calculateLength(int[] path);
 
     List<L> getLocations();
 
-    Path getBestPath();
+    IPath getBestPath();
 
-    void setBestPath(Path bestPath);
+    void setBestPath(IPath bestPath);
 
     void resetBestPath();
 
-    void calculateLengths(List<Path> paths);
+    void calculateLengths(List<IPath> paths);
 
     int getLocationsCount();
+
+	IPath createPath(int[] result);
+
+	default IPath createPath() {
+		return createPath(new int[0]);
+	}
 }

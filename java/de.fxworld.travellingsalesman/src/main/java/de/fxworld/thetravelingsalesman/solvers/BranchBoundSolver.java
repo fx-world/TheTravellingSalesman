@@ -1,7 +1,10 @@
-package de.fxworld.thetravelingsalesman;
+package de.fxworld.thetravelingsalesman.solvers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import de.fxworld.thetravelingsalesman.*;
+import de.fxworld.thetravelingsalesman.impl.DoublePath;
 
 public class BranchBoundSolver<T> implements ISolver<T> {
 
@@ -12,7 +15,7 @@ public class BranchBoundSolver<T> implements ISolver<T> {
     }
 
     @Override
-    public Path solve() {
+    public IPath solve() {
         return calculateShortestPath(problem);
     }
 
@@ -21,18 +24,18 @@ public class BranchBoundSolver<T> implements ISolver<T> {
         return problem;
     }
 
-    protected Path calculateShortestPath(IProblem<T> problem) {
+    protected IPath calculateShortestPath(IProblem<T> problem) {
     	List<Integer> leftToVisit = new ArrayList<Integer>();
     	
     	for (int i = 0; i < problem.getLocationsCount(); i++) {
     		leftToVisit.add(i);
     	}
     	
-        return calculateShortestPath(problem, new Path(problem), leftToVisit);
+        return calculateShortestPath(problem, problem.createPath(), leftToVisit);
     }
 
-    protected Path calculateShortestPath(IProblem<T> problem, Path startPath, List<Integer> leftToVisit) {
-        Path bestPath = null;
+    protected IPath calculateShortestPath(IProblem<T> problem, IPath startPath, List<Integer> leftToVisit) {
+        IPath bestPath = null;
 
         if (leftToVisit.size() == 1) {
             bestPath = startPath.to(leftToVisit.get(0));
@@ -40,27 +43,27 @@ public class BranchBoundSolver<T> implements ISolver<T> {
             problem.setBestPath(bestPath);
 
         } else {
-            List<Path> nextPaths = new ArrayList<Path>();
-            Path globalBestPath = problem.getBestPath();
+            List<IPath> nextPaths = new ArrayList<>();
+            IPath globalBestPath = problem.getBestPath();
 
             for (int nextLocation : leftToVisit) {
-                Path nextPath = startPath.to(nextLocation);
+            	IPath nextPath = startPath.to(nextLocation);
 
-                if (globalBestPath == null || nextPath.getLength() < globalBestPath.getLength()) {
+                if (nextPath.isBetter(globalBestPath)) {
                     nextPaths.add(nextPath);
                 }
             }
 
             Collections.sort(nextPaths);
 
-            for (Path nextPath : nextPaths) {
+            for (IPath nextPath : nextPaths) {
                 List<Integer> newLeftToVisit = new ArrayList<>(leftToVisit);
                 Integer nextLocation = nextPath.getLast();
                 newLeftToVisit.remove(nextLocation);
 
-                Path path = calculateShortestPath(problem, nextPath, newLeftToVisit);
+                IPath path = calculateShortestPath(problem, nextPath, newLeftToVisit);
 
-                if (path != null && (bestPath == null || path.getLength() < bestPath.getLength())) {
+                if (path != null && (path.isBetter(bestPath))) {
                     bestPath = path;
                 }
             }

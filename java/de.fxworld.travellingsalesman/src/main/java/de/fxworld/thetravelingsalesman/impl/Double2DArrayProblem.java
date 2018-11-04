@@ -1,4 +1,4 @@
-package de.fxworld.thetravelingsalesman;
+package de.fxworld.thetravelingsalesman.impl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,16 +6,19 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
+import de.fxworld.thetravelingsalesman.IPath;
+import de.fxworld.thetravelingsalesman.IProblem;
+
+public class Double2DArrayProblem<T> extends AbstractProblem<T> implements IProblem<T> {
 
     private double[][] distances;
 
-    public Problem2D(List<T> locations, double[][] distances) {
+    public Double2DArrayProblem(List<T> locations, double[][] distances) {
         super(locations);
         this.distances = distances;
     }
 
-    public Problem2D(String path) throws IOException {
+    public Double2DArrayProblem(String path) throws IOException {
         super();
         this.distances = readGraph(path);
 
@@ -26,18 +29,10 @@ public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
 //        setLocations(locations);
     }
 
-    /* (non-Javadoc)
-     * @see IProblem#getDistance(Location, Location)
-     */
-    @Override
     public double getDistance(int from, int to) {
         return distances[from][to];
     }
 
-    /* (non-Javadoc)
-     * @see IProblem#calculateLength(java.util.List)
-     */
-    @Override
     public double calculateLength(int[] path) {
         double result = 0;
 
@@ -49,9 +44,9 @@ public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
     }
 
     @Override
-    public void calculateLengths(List<Path> paths) {
+    public void calculateLengths(List<IPath> paths) {
 
-        for (Path path : paths) {
+        for (IPath path : paths) {
             double result = 0;
             int[] locations = path.getLocations();
             for (int i = 1; i < locations.length; i++) {
@@ -59,7 +54,7 @@ public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
             	int to = locations[i];
                 result += distances[from][to];
             }
-            path.setLength(result);
+            ((DoublePath) path).setLength(result);
         }
     }
 
@@ -99,4 +94,9 @@ public class Problem2D<T> extends AbstractProblem<T> implements IProblem<T> {
 
         return graph;
     }
+
+	@Override
+	public IPath createPath(int[] locations) {
+		return new DoublePath(this, locations);
+	}
 }

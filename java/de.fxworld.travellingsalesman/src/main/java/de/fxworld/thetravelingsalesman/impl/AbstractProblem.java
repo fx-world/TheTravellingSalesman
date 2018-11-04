@@ -1,11 +1,14 @@
-package de.fxworld.thetravelingsalesman;
+package de.fxworld.thetravelingsalesman.impl;
 import java.util.Collections;
 import java.util.List;
+
+import de.fxworld.thetravelingsalesman.IPath;
+import de.fxworld.thetravelingsalesman.IProblem;
 
 public abstract class AbstractProblem<L> implements IProblem<L> {
 
     private List<L> locations;
-    private Path bestPath;
+    private volatile IPath bestPath;
     private int locationsCount;
 
     public AbstractProblem() {}
@@ -29,13 +32,13 @@ public abstract class AbstractProblem<L> implements IProblem<L> {
     }
 
     @Override
-    public Path getBestPath() {
+    public IPath getBestPath() {
         return bestPath;
     }
 
     @Override
-    public synchronized void setBestPath(Path bestPath) {
-        if (this.bestPath == null || (bestPath != null && bestPath.getLength() < this.bestPath.getLength())) {
+    public synchronized void setBestPath(IPath bestPath) {
+        if (bestPath != null && bestPath.isBetter(this.bestPath)) {
             this.bestPath = bestPath;
         }
     }

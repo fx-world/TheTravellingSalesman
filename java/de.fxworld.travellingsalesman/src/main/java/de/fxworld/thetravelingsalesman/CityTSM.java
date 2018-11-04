@@ -1,6 +1,8 @@
 package de.fxworld.thetravelingsalesman;
 import java.util.*;
 
+import de.fxworld.thetravelingsalesman.solvers.*;
+
 public class CityTSM {
 
 	private IProblem<City> problem;
@@ -40,7 +42,7 @@ public class CityTSM {
 		problem = ProblemBuilder.create(City.class)
 			.locations(cities)
 			.distances((c1, c2) -> distFrom(c1.lat, c1.lon, c2.lat, c2.lon))
-			.build();
+			.buildIntegerArray();
 	}
 	
 	public void run() {
@@ -50,16 +52,20 @@ public class CityTSM {
 		
 		testSolvers(new DummySolver<City>(problem));
 		testSolvers(new NearestNeighborSolver<City>(problem));
+		testSolvers(new EvolutionSolver<City>(problem));
 		testSolvers(new ParallelBranchBoundSolver<City>(problem));
-		//testSolvers(new BranchBoundSolver<City>(problem));		
+		
+		testSolvers(new BranchBoundSolver<City>(problem));		
 	}
 	
 	protected void testSolvers(ISolver<City> solver) {
         long from = System.currentTimeMillis();
-        Path path = solver.solve();
+        IPath path = solver.solve();
         long to = System.currentTimeMillis();
 
-        System.out.println(solver.toString() + " best=" + path.getLength() + " time=" + (to - from));
+        System.out.println(solver.toString());
+        System.out.println("\ttime=" + (to - from));
+        System.out.println("\tbest=" + path);
     }
 	
 	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {

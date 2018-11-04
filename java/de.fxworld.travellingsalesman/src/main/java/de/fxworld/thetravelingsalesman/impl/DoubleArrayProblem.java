@@ -1,11 +1,14 @@
-package de.fxworld.thetravelingsalesman;
+package de.fxworld.thetravelingsalesman.impl;
 import java.util.List;
 
-public class ProblemArray<L> extends AbstractProblem<L>  implements IProblem<L> {
+import de.fxworld.thetravelingsalesman.IPath;
+import de.fxworld.thetravelingsalesman.IProblem;
+
+public class DoubleArrayProblem<L> extends AbstractProblem<L>  implements IProblem<L> {
 
     private double[] distances;
 
-    public ProblemArray(List<L> locations, double[][] distances) {
+    public DoubleArrayProblem(List<L> locations, double[][] distances) {
         super(locations);
         this.distances = convertDistances(distances, getLocationsCount());
     }
@@ -22,18 +25,10 @@ public class ProblemArray<L> extends AbstractProblem<L>  implements IProblem<L> 
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see IProblem#getDistance(Location, Location)
-     */
-    @Override
     public double getDistance(int from, int to) {
         return distances[from * getLocationsCount() + to];
     }
 
-    /* (non-Javadoc)
-     * @see IProblem#calculateLength(java.util.List)
-     */
-    @Override
     public double calculateLength(int[] path) {
         double result = 0;
 
@@ -45,20 +40,25 @@ public class ProblemArray<L> extends AbstractProblem<L>  implements IProblem<L> 
     }
 
     @Override
-    public void calculateLengths(List<Path> paths) {
+    public void calculateLengths(List<IPath> paths) {
 
-        for (Path path : paths) {
-            int result = 0;
+        for (IPath path : paths) {
+            double result = 0;
             int[] locations = path.getLocations();
             for (int i = 1; i < locations.length; i++) {
                 int from = locations[i - 1];
                 int to = locations[i];
                 result += distances[from * getLocationsCount() + to];
             }
-            path.setLength(result);
+            ((DoublePath) path).setLength(result);
         }
     }
 
+	@Override
+	public IPath createPath(int[] locations) {
+		return new DoublePath(this, locations);
+	}
+    
 	@Override
 	public String toString() {
 		return "ProblemArray [LocationsCount=" + getLocationsCount() + "]";
