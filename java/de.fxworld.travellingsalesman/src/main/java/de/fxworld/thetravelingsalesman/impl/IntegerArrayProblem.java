@@ -6,7 +6,7 @@ import de.fxworld.thetravelingsalesman.IProblem;
 
 public class IntegerArrayProblem<L> extends AbstractProblem<L>  implements IProblem<L> {
 
-    private int[] distances;
+    protected int[] distances;
 
     public IntegerArrayProblem(List<L> locations, int[][] distances) {
         super(locations);

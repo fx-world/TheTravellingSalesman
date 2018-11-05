@@ -15,5 +15,6 @@
 	<modules>
 		<module>de.fxworld.travellingsalesman</module>
 		<module>de.fxworld.travellingsalesman.benchmark</module>
+		<module>de.fxworld.travellingsalesman.gpu</module>
 	</modules>
 </project>

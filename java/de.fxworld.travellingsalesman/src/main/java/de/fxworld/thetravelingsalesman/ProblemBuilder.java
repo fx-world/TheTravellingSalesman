@@ -78,6 +78,19 @@ public class ProblemBuilder<T> {
 		
 		return new Integer2DArrayProblem<T>(locations, dist);
 	}
+	
+	public IProblem<T> buildIntegerArray(BiFunction<List<T>, int[][], IProblem<T>> creator) {
+		int[][] dist = new int[locations.size()][];
+		
+		for (int i = 0; i < locations.size(); i++) {
+			dist[i] = new int[locations.size()];
+			for (int j = 0; j < locations.size(); j++) {
+				dist[i][j] = mapToInt(distanceCalc.apply(locations.get(i), locations.get(j)));
+			}
+		}
+		
+		return creator.apply(locations, dist);
+	}
 
 	protected int mapToInt(double value) {
 		return (int) (value * intMultiplicator);
