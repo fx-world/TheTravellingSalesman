@@ -18,25 +18,43 @@ public class IntegerArrayGpuProblem<T> extends IntegerArrayProblem<T> {
 	@Override
 	public void calculateLengths(final List<IPath> paths) {
 
+		int[][] allLocations = new int[paths.size()][];
+		int[] lengths = new int[paths.size()];
+		int[] results = new int[paths.size()];
+		int locationCount = getLocationsCount();
+		int[] distances = this.distances;
+		
+		for (int i = 0; i < paths.size(); i++) {
+			IPath path = paths.get(i);
+			allLocations[i] = path.getLocations();
+			lengths[i] = allLocations[i].length;
+		}
+		
 		Kernel kernel = new Kernel() {
 		    @Override
 		    public void run() {
 		        int id = getGlobalId();
-		        IPath path = paths.get(id);
 	            
+		        int length = lengths[id];
 		        int result = 0;
-	            int[] locations = path.getLocations();
-	            for (int i = 1; i < locations.length; i++) {
+	            int[] locations = allLocations[id];
+	            for (int i = 1; i < length; i++) {
 	                int from = locations[i - 1];
 	                int to = locations[i];
-	                result += distances[from * getLocationsCount() + to];
+	                result += distances[from * locationCount + to];
 	            }
-	            ((IntegerPath) path).setLength(result);
+	            results[id] = result;	            
 		    }
 		};
 		
 		Range range = Range.create(paths.size());
 		kernel.execute(range);
-		System.out.println("Execution mode = "+kernel.getExecutionMode());
+		kernel.dispose();
+		//System.out.println("Execution mode = "+kernel.getTargetDevice().getShortDescription());
+		
+		for (int i = 0; i < paths.size(); i++) {
+			IPath path = paths.get(i);
+			((IntegerPath) path).setLength(results[i]);
+		}
 	}
 }
