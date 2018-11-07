@@ -1,1 +1,8 @@
-harts : true
+
+theme : beige
+
+code-line-numbers : true
+
+charts : true
+
+footnote : "fx-world Softwareentwicklung Pascal Weyprecht"

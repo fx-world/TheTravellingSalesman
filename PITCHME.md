@@ -24,28 +24,33 @@ for (int i = 0; i < factorial(locations.size()); i++) {
 ```
 @[1]
 @[2]
-@[3-4]
-@[5-7]
+@[4-6]
 +++
 
 ### Branch & Bound
 
 ```
-Path solve(Path pathUntilNow, List<Location> locationsLeftToVisit) {
-	for (Location location in locationsLeftToVisit) {
+Path solve(Path pathUntilNow, List<Location> leftLocations) {
+	for (Location location in leftLocations) {
 	    Path newPath = pathUntilNow.to(location)
-	    List<Location> newLocations = locationsLeftToVisit.remove(newPath)
+	    List<Location> locations = leftLocations.remove(newPath)
 	
 	    if (newPath.isBetter(bestPath)) {
-	        Path mayBeBestPath = solve(newPath, newLocations)
+	        Path path = solve(newPath, locations)
 	
-	        if (mayBeBestPath.isBetter(bestPath)) {
-	            bestPath = mayBeBestPath;
+	        if (path.isBetter(bestPath)) {
+	            bestPath = path;
 	        }
 	    }
 	}
 }
 ```
+@[1]
+@[2]
+@[3-4]
+@[6]
+@[7]
+
 +++
 
 ### Others
@@ -53,6 +58,7 @@ Path solve(Path pathUntilNow, List<Location> locationsLeftToVisit) {
 * Evolution
 * Ant
 * Nearest Neighbor
+* ...
 
 ---
 <canvas data-chart="bar">
@@ -71,3 +77,10 @@ Path solve(Path pathUntilNow, List<Location> locationsLeftToVisit) {
 }
 -->
 </canvas>
+
+---
+
+### Conclusion
+
+* choise of algorithm
+* choise of implementation 
