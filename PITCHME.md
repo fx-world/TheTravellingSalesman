@@ -61,6 +61,8 @@ Path solve(Path pathUntilNow, List<Location> leftLocations) {
 * ...
 
 ---
+### Run time
+
 <canvas data-chart="bar">
 <!-- 
 {
@@ -70,6 +72,73 @@ Path solve(Path pathUntilNow, List<Location> leftLocations) {
    {
     "data":[1,435968,43902,22355],
     "label":"","backgroundColor":"rgba(20,220,220,.8)"
+   }
+  ]
+ }, 
+ "options": { "responsive": "true" }
+}
+-->
+</canvas>
+
++++
+
+### 2 dimensional double array
+
+```
+public class Problem { 
+	private double[][] distances;
+}
+```
++++
+
+### Run time comparison
+
+<canvas data-chart="bar">
+<!-- 
+{
+ "data": {
+  "labels": ["NearestNeighborSolver","BranchBoundSolver","ParallelBranchBoundSolver","EvolutionSolver"],
+  "datasets": [
+   {
+    "data":[1,435968,43902,22355],
+    "label":"double[][]","backgroundColor":"rgba(20,220,220,.8)"
+   },
+   {
+    "data":[1,419558,39975,22188],
+    "label":"double[]","backgroundColor":"rgba(20,20,220,.8)"
+   }
+  ]
+ }, 
+ "options": { "responsive": "true" }
+}
+-->
+</canvas>
+
++++
+
+### Run time comparison (double vs integer)
+
+<canvas data-chart="bar">
+<!-- 
+{
+ "data": {
+  "labels": ["NearestNeighborSolver","BranchBoundSolver","ParallelBranchBoundSolver","EvolutionSolver"],
+  "datasets": [
+   {
+    "data":[1,435968,43902,22355],
+    "label":"double[][]","backgroundColor":"rgba(20,220,220,.8)"
+   },
+   {
+    "data":[1,419558,39975,22188],
+    "label":"double[]","backgroundColor":"rgba(20,20,220,.8)"
+   },
+   {
+    "data":[1,401608,42075,22019],
+    "label":"int[][]","backgroundColor":"rgba(20,20,220,.8)"
+   },
+   {
+    "data":[1,393023,42513,22330],
+    "label":"int[]","backgroundColor":"rgba(20,20,220,.8)"
    }
   ]
  }, 
