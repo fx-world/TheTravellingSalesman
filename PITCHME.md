@@ -157,7 +157,7 @@ public class Problem {
   "labels": ["NearestNeighborSolver","BranchBoundSolver","ParallelBranchBoundSolver","EvolutionSolver"],
   "datasets": [
    {
-    "data":[2512925,1447407,1447407,2510122],
+    "data":[2279670,1532916,1532916,1532916],
     "label":"length","backgroundColor":"rgba(20,220,220,.8)"
    }
   ]
