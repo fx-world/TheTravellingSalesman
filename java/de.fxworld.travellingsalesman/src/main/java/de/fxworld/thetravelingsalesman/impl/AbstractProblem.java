@@ -6,15 +6,23 @@ import de.fxworld.thetravelingsalesman.IPath;
 import de.fxworld.thetravelingsalesman.IProblem;
 
 public abstract class AbstractProblem<L> implements IProblem<L> {
-
+	
     private List<L> locations;
     private volatile IPath bestPath;
     private int locationsCount;
+    
+    protected int fixedFirstLocation = -1;
 
     public AbstractProblem() {}
 
     public AbstractProblem(List<L> locations) {
-        setLocations(locations);
+    	this(locations, -1);
+    }
+    
+    public AbstractProblem(List<L> locations, int fixedFirstLocation) {
+    	this.fixedFirstLocation = fixedFirstLocation;
+    	
+    	setLocations(locations);
     }
 
     protected void setLocations(List<L> locations) {
@@ -52,4 +60,12 @@ public abstract class AbstractProblem<L> implements IProblem<L> {
     public int getLocationsCount() {
         return locationsCount;
     }
+
+	public int getFixedFirstLocation() {
+		return fixedFirstLocation;
+	}
+
+	public void setFixedFirstLocation(int fixedFirstLocation) {
+		this.fixedFirstLocation = fixedFirstLocation;
+	}
 }

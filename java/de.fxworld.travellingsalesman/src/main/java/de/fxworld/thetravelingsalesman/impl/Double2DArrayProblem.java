@@ -33,22 +33,18 @@ public class Double2DArrayProblem<T> extends AbstractProblem<T> implements IProb
         return distances[from][to];
     }
 
-    public double calculateLength(int[] path) {
-        double result = 0;
-
-        for (int i = 1; i < path.length; i++) {
-            result += getDistance(path[i - 1], path[i]);
-        }
-
-        return result;
-    }
-
     @Override
     public void calculateLengths(List<IPath> paths) {
 
         for (IPath path : paths) {
             double result = 0;
             int[] locations = path.getLocations();
+            
+            if (fixedFirstLocation >= 0 && locations.length > 0 && locations[0] != fixedFirstLocation) {
+            	((DoublePath) path).setLength(Double.POSITIVE_INFINITY);
+            	continue;
+            }
+            
             for (int i = 1; i < locations.length; i++) {
             	int from = locations[i - 1];
             	int to = locations[i];

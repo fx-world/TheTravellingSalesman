@@ -22,4 +22,6 @@ public interface IProblem<L> {
 	default IPath createPath() {
 		return createPath(new int[0]);
 	}
+
+	void setFixedFirstLocation(int fixedFirstLocation);
 }
