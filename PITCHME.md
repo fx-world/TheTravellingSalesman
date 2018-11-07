@@ -134,11 +134,11 @@ public class Problem {
    },
    {
     "data":[1,401608,42075,22019],
-    "label":"int[][]","backgroundColor":"rgba(20,20,220,.8)"
+    "label":"int[][]","backgroundColor":"rgba(220,20,220,.8)"
    },
    {
     "data":[1,393023,42513,22330],
-    "label":"int[]","backgroundColor":"rgba(20,20,220,.8)"
+    "label":"int[]","backgroundColor":"rgba(20,220,20,.8)"
    }
   ]
  }, 
@@ -147,6 +147,25 @@ public class Problem {
 -->
 </canvas>
 
+---
+### result comparison
+
+<canvas data-chart="bar">
+<!-- 
+{
+ "data": {
+  "labels": ["NearestNeighborSolver","BranchBoundSolver","ParallelBranchBoundSolver","EvolutionSolver"],
+  "datasets": [
+   {
+    "data":[2512925,1447407,1447407,2510122],
+    "label":"length","backgroundColor":"rgba(20,220,220,.8)"
+   }
+  ]
+ }, 
+ "options": { "responsive": "true" }
+}
+-->
+</canvas>
 ---
 
 ### Conclusion
