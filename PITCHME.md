@@ -38,9 +38,8 @@ for (int i = 0; i < factorial(locations.size()); i++) {
 
 * time
 * data types
-
-factorial(13) < Integer.MaxValue
-6.227.020.800 < 2.147.483.647
+ - factorial(13) < Integer.MaxValue
+ - 6.227.020.800 < 2.147.483.647
 
 +++
 
