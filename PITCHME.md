@@ -9,6 +9,10 @@ Given a list of locations, what is the shortest route that contains every locati
 
 [Wikipedia](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
 
++++
+
+![TSM](https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/GLPK_solution_of_a_travelling_salesman_problem.svg/512px-GLPK_solution_of_a_travelling_salesman_problem.svg.png)
+
 ---
 
 ### Brute Force
