@@ -3,18 +3,18 @@ package de.fxworld.thetravelingsalesman.impl;
 import de.fxworld.thetravelingsalesman.IPath;
 import de.fxworld.thetravelingsalesman.IProblem;
 
-public abstract class AbstractPath implements IPath {
+public abstract class AbstractPath<T> implements IPath<T> {
 
-	protected IProblem<?> problem;
+	protected IProblem<T> problem;
 	protected int[] locations;
 
-	public AbstractPath(IProblem<?> problem, int[] locations) {
+	public AbstractPath(IProblem<T> problem, int[] locations) {
 		this.problem = problem;
 		this.locations = locations;
 	}
 
 	@Override
-	public IProblem<?> getProblem() {
+	public IProblem<T> getProblem() {
 	    return problem;
 	}
 

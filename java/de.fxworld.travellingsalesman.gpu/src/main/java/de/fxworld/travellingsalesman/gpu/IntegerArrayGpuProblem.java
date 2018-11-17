@@ -16,7 +16,7 @@ public class IntegerArrayGpuProblem<T> extends IntegerArrayProblem<T> {
 	}
 
 	@Override
-	public void calculateLengths(final List<IPath> paths) {
+	public void calculateLengths(final List<IPath<T>> paths) {
 
 		int[][] allLocations = new int[paths.size()][];
 		int[] lengths = new int[paths.size()];
@@ -25,7 +25,7 @@ public class IntegerArrayGpuProblem<T> extends IntegerArrayProblem<T> {
 		int[] distances = this.distances;
 		
 		for (int i = 0; i < paths.size(); i++) {
-			IPath path = paths.get(i);
+			IPath<T> path = paths.get(i);
 			allLocations[i] = path.getLocations();
 			lengths[i] = allLocations[i].length;
 		}
@@ -53,8 +53,8 @@ public class IntegerArrayGpuProblem<T> extends IntegerArrayProblem<T> {
 		//System.out.println("Execution mode = "+kernel.getTargetDevice().getShortDescription());
 		
 		for (int i = 0; i < paths.size(); i++) {
-			IPath path = paths.get(i);
-			((IntegerPath) path).setLength(results[i]);
+			IPath<T> path = paths.get(i);
+			((IntegerPath<T>) path).setLength(results[i]);
 		}
 	}
 }

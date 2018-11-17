@@ -4,31 +4,31 @@ import java.util.*;
 import de.fxworld.thetravelingsalesman.IPath;
 import de.fxworld.thetravelingsalesman.IProblem;
 
-public class IntegerPath extends AbstractPath implements IPath {
+public class IntegerPath<T> extends AbstractPath<T> implements IPath<T> {
     
     private int length = Integer.MIN_VALUE;
 
-    protected IntegerPath(IProblem<?> problem, int[] locations) {
+    protected IntegerPath(IProblem<T> problem, int[] locations) {
     	super(problem, locations);
     }
 
-    protected IntegerPath(IProblem<?> problem) {
+    protected IntegerPath(IProblem<T> problem) {
     	super(problem, new int[0]);
         this.length = 0;
     }
 
-    protected IntegerPath(IProblem<?> problem, int start) {
+    protected IntegerPath(IProblem<T> problem, int start) {
     	super(problem, new int[] { start });
     }
 
-    protected IntegerPath(IProblem<?> problem, int[] locations, int nextLocation) {
+    protected IntegerPath(IProblem<T> problem, int[] locations, int nextLocation) {
     	super(problem, Arrays.copyOf(locations, locations.length + 1));
     	this.locations[this.locations.length - 1] = nextLocation;
     }
     
     @Override
-	public IntegerPath to(int nextLocation) {
-	    return new IntegerPath(problem, locations, nextLocation);
+	public IntegerPath<T> to(int nextLocation) {
+	    return new IntegerPath<T>(problem, locations, nextLocation);
 	}
 
     public double getLength() {
@@ -52,15 +52,15 @@ public class IntegerPath extends AbstractPath implements IPath {
 	 * @see de.fxworld.thetravelingsalesman.impl.IPath#compareTo(de.fxworld.thetravelingsalesman.impl.Path)
 	 */
     @Override
-    public int compareTo(IPath o) {
-        return Double.compare(getLength(), ((IntegerPath) o).getLength());
+    public int compareTo(IPath<T> o) {
+        return Double.compare(getLength(), ((IntegerPath<T>) o).getLength());
     }
 
 	@Override
-	public boolean isBetter(IPath globalBestPath) {
+	public boolean isBetter(IPath<T> globalBestPath) {
 		boolean result = true;
 		
-		if (globalBestPath != null && ((IntegerPath) globalBestPath).getLength() < getLength()) {
+		if (globalBestPath != null && ((IntegerPath<T>) globalBestPath).getLength() < getLength()) {
 			result = false;
 		}
 		

@@ -3,7 +3,6 @@ package de.fxworld.thetravelingsalesman.solvers;
 import java.util.*;
 
 import de.fxworld.thetravelingsalesman.*;
-import de.fxworld.thetravelingsalesman.impl.DoublePath;
 
 public class NearestNeighborSolver<T> implements ISolver<T> {
 
@@ -14,11 +13,11 @@ public class NearestNeighborSolver<T> implements ISolver<T> {
     }
 
     @Override
-    public IPath solve() {
-    	IPath start = problem.createPath();
+    public IPath<T> solve() {
+    	IPath<T> start = problem.createPath();
     	
     	for (int j = 0; j < problem.getLocationsCount(); j++) {
-	    	List<IPath> neighbors = new ArrayList<>();
+	    	List<IPath<T>> neighbors = new ArrayList<>();
 	    	
 	    	for (int i = 0; i < problem.getLocationsCount(); i++) {
 	    		if (!start.contains(i)) {

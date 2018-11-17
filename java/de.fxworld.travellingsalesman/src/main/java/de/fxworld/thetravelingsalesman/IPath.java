@@ -1,10 +1,10 @@
 package de.fxworld.thetravelingsalesman;
 
-public interface IPath extends Comparable<IPath> {
+public interface IPath<T> extends Comparable<IPath<T>> {
 
-	IPath to(int nextLocation);
+	IPath<T> to(int nextLocation);
 
-	IProblem<?> getProblem();
+	IProblem<T> getProblem();
 
 	int[] getLocations();
 
@@ -14,6 +14,6 @@ public interface IPath extends Comparable<IPath> {
 
 	boolean contains(int location);
 
-	boolean isBetter(IPath globalBestPath);
+	boolean isBetter(IPath<T> globalBestPath);
 
 }

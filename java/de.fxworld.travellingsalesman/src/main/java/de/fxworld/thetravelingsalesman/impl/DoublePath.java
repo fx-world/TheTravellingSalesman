@@ -4,31 +4,31 @@ import java.util.*;
 import de.fxworld.thetravelingsalesman.IPath;
 import de.fxworld.thetravelingsalesman.IProblem;
 
-public class DoublePath extends AbstractPath implements IPath {
+public class DoublePath<T> extends AbstractPath<T> implements IPath<T> {
     
 	private double length = Double.NaN;
 
-    protected DoublePath(IProblem<?> problem, int[] locations) {
+    protected DoublePath(IProblem<T> problem, int[] locations) {
     	super(problem, locations);
     }
 
-    protected DoublePath(IProblem<?> problem) {
+    protected DoublePath(IProblem<T> problem) {
     	super(problem, new int[0]);
         this.length = 0;
     }
 
-    protected DoublePath(IProblem<?> problem, int start) {
+    protected DoublePath(IProblem<T> problem, int start) {
     	super(problem, new int[] { start });
     }
 
-    protected DoublePath(IProblem<?> problem, int[] locations, int nextLocation) {
+    protected DoublePath(IProblem<T> problem, int[] locations, int nextLocation) {
     	super(problem, Arrays.copyOf(locations, locations.length + 1));
     	this.locations[this.locations.length - 1] = nextLocation;
     }
     
     @Override
-	public DoublePath to(int nextLocation) {
-	    return new DoublePath(problem, locations, nextLocation);
+	public DoublePath<T> to(int nextLocation) {
+	    return new DoublePath<T>(problem, locations, nextLocation);
 	}
 
     public double getLength() {
@@ -52,15 +52,15 @@ public class DoublePath extends AbstractPath implements IPath {
 	 * @see de.fxworld.thetravelingsalesman.impl.IPath#compareTo(de.fxworld.thetravelingsalesman.impl.Path)
 	 */
     @Override
-    public int compareTo(IPath o) {
-        return Double.compare(getLength(), ((DoublePath) o).getLength());
+    public int compareTo(IPath<T> o) {
+        return Double.compare(getLength(), ((DoublePath<T>) o).getLength());
     }
 
 	@Override
-	public boolean isBetter(IPath globalBestPath) {
+	public boolean isBetter(IPath<T> globalBestPath) {
 		boolean result = true;
 		
-		if (globalBestPath != null && ((DoublePath) globalBestPath).getLength() < getLength()) {
+		if (globalBestPath != null && ((DoublePath<T>) globalBestPath).getLength() < getLength()) {
 			result = false;
 		}
 		

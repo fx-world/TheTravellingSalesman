@@ -3,12 +3,11 @@ package de.fxworld.thetravelingsalesman.solvers;
 import java.util.*;
 
 import de.fxworld.thetravelingsalesman.*;
-import de.fxworld.thetravelingsalesman.impl.DoublePath;
 
 public class EvolutionSolver<T> implements ISolver<T> {
 
 	private IProblem<T> problem;
-	private List<IPath> population = new ArrayList<>();
+	private List<IPath<T>> population = new ArrayList<>();
 	
 	private Random random = new Random();
 	
@@ -26,9 +25,9 @@ public class EvolutionSolver<T> implements ISolver<T> {
 	}
 
 	@Override
-	public IPath solve() {
+	public IPath<T> solve() {
 		//Path result = createRandom();
-		IPath result = createNearest();
+		IPath<T> result = createNearest();
 		
 		for (int i = 0; i < 10; i++) {
 			population.add(result);
@@ -40,15 +39,15 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		}
 		
 		for (int generation = 0; generation < generationCount; generation++) {
-			List<IPath> descendants = new ArrayList<>();			
+			List<IPath<T>> descendants = new ArrayList<>();			
 			
 			Collections.sort(population);
 			
 			for (int i = 0; i < eliteCount; i++) {
-				IPath elite = population.get(i);
+				IPath<T> elite = population.get(i);
 				
 				for (int j = 0; j < eliteDescendendCount; j++) {
-					IPath descendant = evolve(elite);
+					IPath<T> descendant = evolve(elite);
 				
 					if (random.nextInt(100) < mutatePercent) {
 						descendant = mutate(descendant);
@@ -67,7 +66,7 @@ public class EvolutionSolver<T> implements ISolver<T> {
 				population.remove(population.size() - 1);
 			}
 			
-			IPath best = population.get(0);
+			IPath<T> best = population.get(0);
 			if (best.isBetter(result)) {
 				result = best;
 				problem.setBestPath(best);
@@ -84,7 +83,7 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		return result;
 	}
 
-	private IPath evolve(IPath path) {
+	private IPath<T> evolve(IPath<T> path) {
 		int[] locations = path.getLocations();
 		int[] result = Arrays.copyOf(locations, locations.length);
 		int from = random.nextInt(locations.length - 1);		
@@ -94,7 +93,7 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		return problem.createPath(result);
 	}
 	
-	private IPath mutate(IPath path) {
+	private IPath<T> mutate(IPath<T> path) {
 		int[] locations = path.getLocations();
 		int[] result = Arrays.copyOf(locations, locations.length);
 		int from = random.nextInt(locations.length);		
@@ -105,7 +104,7 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		return problem.createPath(result);
 	}
 	
-	private IPath createRandom() {
+	private IPath<T> createRandom() {
 		int[] result = new int[problem.getLocationsCount()];
 		List<Integer> locations = new ArrayList<>();
 		
@@ -121,11 +120,11 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		return problem.createPath(result);
 	}
 	
-	private IPath createNearest() {
-		IPath result = problem.createPath();
+	private IPath<T> createNearest() {
+		IPath<T> result = problem.createPath();
     	
     	for (int j = 0; j < problem.getLocationsCount(); j++) {
-	    	List<IPath> neighbors = new ArrayList<>();
+	    	List<IPath<T>> neighbors = new ArrayList<>();
 	    	
 	    	for (int i = 0; i < problem.getLocationsCount(); i++) {
 	    		if (!result.contains(i)) {

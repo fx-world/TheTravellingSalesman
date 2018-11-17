@@ -30,14 +30,14 @@ public class DoubleArrayProblem<L> extends AbstractProblem<L>  implements IProbl
     }
 
     @Override
-    public void calculateLengths(List<IPath> paths) {
+    public void calculateLengths(List<IPath<L>> paths) {
 
-        for (IPath path : paths) {
+        for (IPath<L> path : paths) {
             double result = 0;
             int[] locations = path.getLocations();
             
             if (fixedFirstLocation >= 0 && locations.length > 0 && locations[0] != fixedFirstLocation) {
-            	((DoublePath) path).setLength(Double.POSITIVE_INFINITY);
+            	((DoublePath<L>) path).setLength(Double.POSITIVE_INFINITY);
             	continue;
             }  
             
@@ -46,13 +46,13 @@ public class DoubleArrayProblem<L> extends AbstractProblem<L>  implements IProbl
                 int to = locations[i];
                 result += distances[from * getLocationsCount() + to];
             }
-            ((DoublePath) path).setLength(result);
+            ((DoublePath<L>) path).setLength(result);
         }
     }
 
 	@Override
-	public IPath createPath(int[] locations) {
-		return new DoublePath(this, locations);
+	public IPath<L> createPath(int[] locations) {
+		return new DoublePath<L>(this, locations);
 	}
     
 	@Override

@@ -30,14 +30,14 @@ public class IntegerArrayProblem<L> extends AbstractProblem<L>  implements IProb
     }
 
     @Override
-    public void calculateLengths(List<IPath> paths) {
+    public void calculateLengths(List<IPath<L>> paths) {
 
-        for (IPath path : paths) {
+        for (IPath<L> path : paths) {
             int result = 0;
             int[] locations = path.getLocations();
             
             if (fixedFirstLocation >= 0 && locations.length > 0 && locations[0] != fixedFirstLocation) {
-            	((IntegerPath) path).setLength(Integer.MAX_VALUE);
+            	((IntegerPath<L>) path).setLength(Integer.MAX_VALUE);
             	continue;
             }  
             
@@ -46,13 +46,13 @@ public class IntegerArrayProblem<L> extends AbstractProblem<L>  implements IProb
                 int to = locations[i];
                 result += distances[from * getLocationsCount() + to];
             }
-            ((IntegerPath) path).setLength(result);
+            ((IntegerPath<L>) path).setLength(result);
         }
     }
 
 	@Override
-	public IPath createPath(int[] locations) {
-		return new IntegerPath(this, locations);
+	public IPath<L> createPath(int[] locations) {
+		return new IntegerPath<L>(this, locations);
 	}
     
 	@Override

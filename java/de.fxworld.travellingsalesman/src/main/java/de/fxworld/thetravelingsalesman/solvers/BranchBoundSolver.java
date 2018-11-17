@@ -1,10 +1,7 @@
 package de.fxworld.thetravelingsalesman.solvers;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import de.fxworld.thetravelingsalesman.*;
-import de.fxworld.thetravelingsalesman.impl.DoublePath;
 
 public class BranchBoundSolver<T> implements ISolver<T> {
 
@@ -15,7 +12,7 @@ public class BranchBoundSolver<T> implements ISolver<T> {
     }
 
     @Override
-    public IPath solve() {
+    public IPath<T> solve() {
         return calculateShortestPath(problem);
     }
 
@@ -24,7 +21,7 @@ public class BranchBoundSolver<T> implements ISolver<T> {
         return problem;
     }
 
-    protected IPath calculateShortestPath(IProblem<T> problem) {
+    protected IPath<T> calculateShortestPath(IProblem<T> problem) {
     	List<Integer> leftToVisit = new ArrayList<Integer>();
     	
     	for (int i = 0; i < problem.getLocationsCount(); i++) {
@@ -34,8 +31,8 @@ public class BranchBoundSolver<T> implements ISolver<T> {
         return calculateShortestPath(problem, problem.createPath(), leftToVisit);
     }
 
-    protected IPath calculateShortestPath(IProblem<T> problem, IPath startPath, List<Integer> leftToVisit) {
-        IPath bestPath = null;
+    protected IPath<T> calculateShortestPath(IProblem<T> problem, IPath<T> startPath, List<Integer> leftToVisit) {
+        IPath<T> bestPath = null;
 
         if (leftToVisit.size() == 1) {
             bestPath = startPath.to(leftToVisit.get(0));
@@ -43,11 +40,11 @@ public class BranchBoundSolver<T> implements ISolver<T> {
             problem.setBestPath(bestPath);
 
         } else {
-            List<IPath> nextPaths = new ArrayList<>();
-            IPath globalBestPath = problem.getBestPath();
+            List<IPath<T>> nextPaths = new ArrayList<>();
+            IPath<T> globalBestPath = problem.getBestPath();
 
             for (int nextLocation : leftToVisit) {
-            	IPath nextPath = startPath.to(nextLocation);
+            	IPath<T> nextPath = startPath.to(nextLocation);
 
                 if (nextPath.isBetter(globalBestPath)) {
                     nextPaths.add(nextPath);
@@ -56,12 +53,12 @@ public class BranchBoundSolver<T> implements ISolver<T> {
 
             Collections.sort(nextPaths);
 
-            for (IPath nextPath : nextPaths) {
+            for (IPath<T> nextPath : nextPaths) {
                 List<Integer> newLeftToVisit = new ArrayList<>(leftToVisit);
                 Integer nextLocation = nextPath.getLast();
                 newLeftToVisit.remove(nextLocation);
 
-                IPath path = calculateShortestPath(problem, nextPath, newLeftToVisit);
+                IPath<T> path = calculateShortestPath(problem, nextPath, newLeftToVisit);
 
                 if (path != null && (path.isBetter(bestPath))) {
                     bestPath = path;

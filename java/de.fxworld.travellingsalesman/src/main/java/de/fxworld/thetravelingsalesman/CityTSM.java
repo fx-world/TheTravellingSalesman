@@ -7,7 +7,7 @@ public class CityTSM {
 
 	private IProblem<City> problem;
 
-	class City {	
+	public class City {	
 		String name;
 		double lat;
 		double lon;

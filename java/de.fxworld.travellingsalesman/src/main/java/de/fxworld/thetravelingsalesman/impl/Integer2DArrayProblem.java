@@ -18,14 +18,14 @@ public class Integer2DArrayProblem<T> extends AbstractProblem<T> implements IPro
     }
 
     @Override
-    public void calculateLengths(List<IPath> paths) {
+    public void calculateLengths(List<IPath<T>> paths) {
 
-        for (IPath path : paths) {
+        for (IPath<T> path : paths) {
             int result = 0;
             int[] locations = path.getLocations();
             
             if (fixedFirstLocation >= 0 && locations.length > 0 && locations[0] != fixedFirstLocation) {
-            	((IntegerPath) path).setLength(Integer.MAX_VALUE);
+            	((IntegerPath<T>) path).setLength(Integer.MAX_VALUE);
             	continue;
             }         
         
@@ -35,12 +35,12 @@ public class Integer2DArrayProblem<T> extends AbstractProblem<T> implements IPro
                 result += distances[from][to];
             }
         
-            ((IntegerPath) path).setLength(result);
+            ((IntegerPath<T>) path).setLength(result);
         }
     }
     
 	@Override
-	public IPath createPath(int[] locations) {
-		return new IntegerPath(this, locations);
+	public IPath<T> createPath(int[] locations) {
+		return new IntegerPath<T>(this, locations);
 	}
 }
