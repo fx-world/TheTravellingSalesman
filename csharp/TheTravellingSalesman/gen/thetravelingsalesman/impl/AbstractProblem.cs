@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Impl
+namespace TheTravelingSalesman.Impl
 {
 	public abstract class AbstractProblem<L> : IProblem<L>
 	{
@@ -38,7 +39,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Impl
 			}
 			else
 			{
-				throw new RuntimeException("Locations already set");
+				throw new Exception("Locations already set");
 			}
 		}
 

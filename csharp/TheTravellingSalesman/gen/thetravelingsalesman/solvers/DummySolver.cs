@@ -1,7 +1,7 @@
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Solvers
+namespace TheTravelingSalesman.Solvers
 {
 	public class DummySolver<T> : ISolver<T>
 	{

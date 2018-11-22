@@ -1,29 +1,29 @@
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Impl
+namespace TheTravelingSalesman.Impl
 {
-	public class DoublePath<T> : AbstractPath<T>, IPath<T>
+	public class IntegerPath<T> : AbstractPath<T>, IPath<T>
 	{
-		private double length = double.NaN;
+		private int length = int.MinValue;
 
-		protected internal DoublePath(IProblem<T> problem, int[] locations)
+		protected internal IntegerPath(IProblem<T> problem, int[] locations)
 			: base(problem, locations)
 		{
 		}
 
-		protected internal DoublePath(IProblem<T> problem)
+		protected internal IntegerPath(IProblem<T> problem)
 			: base(problem, new int[0])
 		{
 			this.length = 0;
 		}
 
-		protected internal DoublePath(IProblem<T> problem, int start)
+		protected internal IntegerPath(IProblem<T> problem, int start)
 			: base(problem, new int[] { start })
 		{
 		}
 
-		protected internal DoublePath(IProblem<T> problem, int[] locations, int nextLocation)
+		protected internal IntegerPath(IProblem<T> problem, int[] locations, int nextLocation)
 			: base(problem, Sharpen.Arrays.CopyOf(locations, locations.Length + 1))
 		{
 			this.locations[this.locations.Length - 1] = nextLocation;
@@ -31,19 +31,19 @@ namespace DE.Fxworld.Thetravelingsalesman.Impl
 
 		public override IPath<T> To(int nextLocation)
 		{
-			return new DoublePath<T>(problem, locations, nextLocation);
+			return new IntegerPath<T>(problem, locations, nextLocation);
 		}
 
 		public virtual double GetLength()
 		{
-			if (double.IsNaN(length))
+			if (length == int.MinValue)
 			{
-				problem.CalculateLengths(System.Linq.Enumerable.ToList(new [] {this}));
+				problem.CalculateLengths(System.Linq.Enumerable.ToList(new IPath<T>[] {this}));
 			}
 			return length;
 		}
 
-		protected internal virtual void SetLength(double length)
+		public virtual void SetLength(int length)
 		{
 			this.length = length;
 		}
@@ -58,13 +58,13 @@ namespace DE.Fxworld.Thetravelingsalesman.Impl
 		*/
 		public override int CompareTo(IPath<T> o)
 		{
-			return Sharpen.Extensions.Compare(GetLength(), ((DoublePath<T>)o).GetLength());
+			return JavaMath.Compare(GetLength(), ((IntegerPath<T>)o).GetLength());
 		}
 
 		public override bool IsBetter(IPath<T> globalBestPath)
 		{
 			bool result = true;
-			if (globalBestPath != null && ((DoublePath<T>)globalBestPath).GetLength() < GetLength())
+			if (globalBestPath != null && ((IntegerPath<T>)globalBestPath).GetLength() < GetLength())
 			{
 				result = false;
 			}

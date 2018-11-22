@@ -1,10 +1,10 @@
 using Sharpen;
 
-namespace DE.Fxworld.Thetravelingsalesman
+namespace TheTravelingSalesman
 {
 	public interface ISolver<T>
 	{
-		IPath Solve();
+		IPath<T> Solve();
 
 		IProblem<T> GetProblem();
 	}

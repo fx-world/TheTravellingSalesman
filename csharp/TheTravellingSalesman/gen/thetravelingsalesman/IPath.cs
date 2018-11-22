@@ -1,7 +1,7 @@
 using System;
 using Sharpen;
 
-namespace DE.Fxworld.Thetravelingsalesman
+namespace TheTravelingSalesman
 {
 	public interface IPath<T> : IComparable<IPath<T>>
 	{

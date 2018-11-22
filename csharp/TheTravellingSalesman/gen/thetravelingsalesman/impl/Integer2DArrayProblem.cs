@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Impl
+namespace TheTravelingSalesman.Impl
 {
-	public class Double2DArrayProblem<T> : AbstractProblem<T>, IProblem<T>
+	public class Integer2DArrayProblem<T> : AbstractProblem<T>, IProblem<T>
 	{
-		private double[][] distances;
+		private int[][] distances;
 
-		public Double2DArrayProblem(IList<T> locations, double[][] distances)
+		public Integer2DArrayProblem(IList<T> locations, int[][] distances)
 			: base(locations)
 		{
 			this.distances = distances;
 		}
 
-		public virtual double GetDistance(int from, int to)
+		public virtual int GetDistance(int from, int to)
 		{
 			return distances[from][to];
 		}
@@ -23,11 +23,11 @@ namespace DE.Fxworld.Thetravelingsalesman.Impl
 		{
 			foreach (IPath<T> path in paths)
 			{
-				double result = 0;
+				int result = 0;
 				int[] locations = path.GetLocations();
 				if (fixedFirstLocation >= 0 && locations.Length > 0 && locations[0] != fixedFirstLocation)
 				{
-					((DoublePath<T>)path).SetLength(double.PositiveInfinity);
+					((IntegerPath<T>)path).SetLength(int.MaxValue);
 					continue;
 				}
 				for (int i = 1; i < locations.Length; i++)
@@ -36,13 +36,13 @@ namespace DE.Fxworld.Thetravelingsalesman.Impl
 					int to = locations[i];
 					result += distances[from][to];
 				}
-				((DoublePath<T>)path).SetLength(result);
+				((IntegerPath<T>)path).SetLength(result);
 			}
 		}
 
 		public override IPath<T> CreatePath(int[] locations)
 		{
-			return new DoublePath<T>(this, locations);
+			return new IntegerPath<T>(this, locations);
 		}
 	}
 }

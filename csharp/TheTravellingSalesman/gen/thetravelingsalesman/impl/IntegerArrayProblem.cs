@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Impl
+namespace TheTravelingSalesman.Impl
 {
 	public class IntegerArrayProblem<L> : AbstractProblem<L>, IProblem<L>
 	{

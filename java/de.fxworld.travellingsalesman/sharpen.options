@@ -1,8 +1,11 @@
+-separateInterfaceConstants
+
 -pascalCase+ 
 -organizeUsings
 -nativeTypeSystem
 -separateInterfaceConstants
 -maxColumns 240
+
 
 
 -typeMapping java.io.StringReader Sharpen.StringReader
@@ -179,6 +182,7 @@
 -fieldMapping java.util.Locale.GERMAN Sharpen.Extensions.GetGermanCulture()
 -fieldMapping java.util.Locale.ENGLISH Sharpen.Extensions.GetEnglishCulture()
 -typeMapping java.lang.Comparable System.IComparable
+-typeMapping java.lang.Comparable<> System.IComparable
 -typeMapping java.util.Comparator<> System.Collections.Generic.IComparer
 -typeMapping java.util.HashSet<> System.Collections.Generic.HashSet
 -typeMapping java.util.HashSet<> System.Collections.Generic.HashSet
@@ -255,3 +259,35 @@
 -fullyQualify KeyPair
 -fullyQualify GSSContext
 -fullyQualify Test
+
+-methodMapping java.lang.Math.toRadians Sharpen.JavaMath.ToRadians
+
+-typeIgnore java.lang.Override
+
+-typeMapping java.lang.Short short?
+-typeMapping java.lang.Boolean bool?
+-typeMapping java.lang.Integer int?
+-typeMapping java.lang.Long long?
+-typeMapping java.lang.Float float?
+-typeMapping java.lang.Double double?
+
+-propertyMapping java.lang.Number.booleanValue Value
+-propertyMapping java.lang.Number.intValue Value
+
+-typeMapping java.lang.Number System.Decimal?
+-methodMapping java.lang.Double.NaN double.NaN
+-methodMapping java.lang.Double.compare JavaMath.Compare
+
+-typeMapping java.util.Random System.Random
+-typeMapping java.lang.Runnable System.Action
+
+-methodMapping java.util.function.BiFunction.apply Invoke
+
+-methodMapping java.io.PrintStream.println WriteLine
+-typeMapping java.util.concurrent.ThreadPoolExecutor Sharpen.Concurrent.ThreadPoolExecutor
+-typeMapping java.util.concurrent.TimeUnit Sharpen.Concurrent.TimeUnit
+-typeMapping java.util.concurrent.BlockingQueue<> System.Collections.Concurrent.BlockingCollection
+
+-methodMapping java.util.List.remove GetAndRemove
+
+-typeMapping java.lang.RuntimeException System.Exception

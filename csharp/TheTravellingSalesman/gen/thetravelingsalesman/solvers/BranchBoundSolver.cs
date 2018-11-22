@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Solvers
+namespace TheTravelingSalesman.Solvers
 {
 	public class BranchBoundSolver<T> : ISolver<T>
 	{
@@ -25,7 +25,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 
 		protected internal virtual IPath<T> CalculateShortestPath(IProblem<T> problem)
 		{
-			IList<int> leftToVisit = new List<int>();
+			IList<int?> leftToVisit = new List<int?>();
 			for (int i = 0; i < problem.GetLocationsCount(); i++)
 			{
 				leftToVisit.Add(i);
@@ -33,12 +33,12 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 			return CalculateShortestPath(problem, problem.CreatePath(), leftToVisit);
 		}
 
-		protected internal virtual IPath<T> CalculateShortestPath(IProblem<T> problem, IPath<T> startPath, IList<int> leftToVisit)
+		protected internal virtual IPath<T> CalculateShortestPath(IProblem<T> problem, IPath<T> startPath, IList<int?> leftToVisit)
 		{
 			IPath<T> bestPath = null;
 			if (leftToVisit.Count == 1)
 			{
-				bestPath = startPath.To(leftToVisit[0]);
+				bestPath = startPath.To(leftToVisit[0].Value);
 				problem.SetBestPath(bestPath);
 			}
 			else
@@ -56,8 +56,8 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 				nextPaths.Sort();
 				foreach (IPath<T> nextPath in nextPaths)
 				{
-					IList<int> newLeftToVisit = new List<int>(leftToVisit);
-					int nextLocation = nextPath.GetLast();
+					IList<int?> newLeftToVisit = new List<int?>(leftToVisit);
+					int? nextLocation = nextPath.GetLast();
 					newLeftToVisit.Remove(nextLocation);
 					IPath<T> path = CalculateShortestPath(problem, nextPath, newLeftToVisit);
 					if (path != null && (path.IsBetter(bestPath)))

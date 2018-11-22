@@ -1,27 +1,31 @@
+using System;
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman.Impl;
 using Sharpen;
 using Sharpen.Function;
+using TheTravelingSalesman.Impl;
 
-namespace DE.Fxworld.Thetravelingsalesman
+namespace TheTravelingSalesman
 {
 	public class ProblemBuilder<T>
 	{
 		private IList<T> locations__;
 
-		private BiFunction<T, T, double> distanceCalc;
+		private BiFunction<T, T, double?> distanceCalc;
 
 		private int intMultiplicator = 1;
 
 		private int fixedFirstLocation = -1;
 
-		private ProblemBuilder()
+		private Type clazz;
+
+		public ProblemBuilder(Type clazz)
 		{
+			this.clazz = typeof(T);
 		}
 
-		public static ProblemBuilder<T> Create<T>()
+		public static ProblemBuilder<V> Create<V>()
 		{
-			return new ProblemBuilder<T>();
+			return new ProblemBuilder<V>(typeof(V));
 		}
 
 		public virtual ProblemBuilder<T> Locations(IList<T> locations)
@@ -30,7 +34,7 @@ namespace DE.Fxworld.Thetravelingsalesman
 			return this;
 		}
 
-		public virtual ProblemBuilder<T> Distances(BiFunction<T, T, double> distanceCalc)
+		public virtual ProblemBuilder<T> Distances(BiFunction<T, T, double?> distanceCalc)
 		{
 			this.distanceCalc = distanceCalc;
 			return this;
@@ -54,10 +58,10 @@ namespace DE.Fxworld.Thetravelingsalesman
 				dist[i] = new double[locations__.Count];
 				for (int j = 0; j < locations__.Count; j++)
 				{
-					dist[i][j] = distanceCalc.Apply(locations__[i], locations__[j]);
+					dist[i][j] = distanceCalc.Invoke(locations__[i], locations__[j]).Value;
 				}
 			}
-			IProblem<T> result = creator.Apply(locations__, dist);
+			IProblem<T> result = creator.Invoke(locations__, dist);
 			result.SetFixedFirstLocation(fixedFirstLocation);
 			return result;
 		}
@@ -80,10 +84,10 @@ namespace DE.Fxworld.Thetravelingsalesman
 				dist[i] = new int[locations__.Count];
 				for (int j = 0; j < locations__.Count; j++)
 				{
-					dist[i][j] = MapToInt(distanceCalc.Apply(locations__[i], locations__[j]));
+					dist[i][j] = MapToInt(distanceCalc.Invoke(locations__[i], locations__[j]).Value);
 				}
 			}
-			IProblem<T> result = creator.Apply(locations__, dist);
+			IProblem<T> result = creator.Invoke(locations__, dist);
 			result.SetFixedFirstLocation(fixedFirstLocation);
 			return result;
 		}

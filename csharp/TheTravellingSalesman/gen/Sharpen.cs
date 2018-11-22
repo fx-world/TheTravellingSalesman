@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 
 namespace Sharpen {
     public abstract class EnumBase : IComparable<EnumBase>, IComparable {
@@ -226,9 +229,30 @@ namespace Sharpen {
             return array;
         }
 
+        public static IList<T> SingletonList<T>(T item)
+        {
+            return new ReadOnlyCollection<T>(new T[] { item });
+        }
+
+        public static void Sort<T>(this IList<T> list)
+        {
+            ((List<T>)list).Sort();
+        }
+
+        public static T GetAndRemove<T>(this IList<T> list,  int index)
+        {
+            T result = list[index];
+            list.RemoveAt(index);
+            return result;
+        }
+
+        public static IList<L> UnmodifiableList<L>(IList<L> list)
+        {
+            return new ReadOnlyCollection<L>(list);
+        }
     }
 
-    public static class Runtime {
+    public class Runtime {
 
         public static bool IsAssignableFrom(Type baseType, Type type) {
             if (baseType.IsAssignableFrom(type)) {
@@ -252,13 +276,7 @@ namespace Sharpen {
 
         public static string substring(string s, int from, int to) {
             return s.Substring(from, to - from);
-        }
-
-        public static string GetSimpleName(this Type t) {
-            string name = t.Name;
-            int index = name.IndexOf('`');
-            return index == -1 ? name : name.Substring(0, index);
-        }
+        }      
 
         public static FieldInfo[] GetDeclaredFields(Type clazz) {
             return clazz.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance);
@@ -277,6 +295,30 @@ namespace Sharpen {
             return null;
         }
 
+		public static long CurrentTimeMillis()
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        }
+
+        public static Runtime GetRuntime()
+        {
+            return new Runtime();
+        }
+
+        public int AvailableProcessors()
+        {
+            return Environment.ProcessorCount;
+        }
+    }
+
+    public static class SharpenExtensions
+    {
+        public static string GetSimpleName(this Type t)
+        {
+            string name = t.Name;
+            int index = name.IndexOf('`');
+            return index == -1 ? name : name.Substring(0, index);
+        }
     }
 
     public class IdentityHashMap<K, V> : Dictionary<K, V> {
@@ -388,4 +430,82 @@ namespace Sharpen {
         }
 
     }
+    
+    public static class JavaMath
+    {
+        public static double ToRadians(double angle)
+        {
+            return (Math.PI / 180) * angle;
+        }
+
+        public static int Compare(double? a, double? b)
+        {
+            return a.Value.CompareTo(b);
+        }
+    }
+    
+    namespace Function
+    {
+    	public delegate O BiFunction<I1, I2, O>(I1 i1, I2 i2);
+       
+    }
+    
+    namespace Concurrent {
+    	public class ThreadPoolExecutor
+        {
+            private object milliseconds;
+            private int taskCount;
+            private int completedTaskCount;
+
+            public ThreadPoolExecutor(int minThreadCount, int maxThreadCount, int v, object milliseconds, BlockingCollection<Action> workQueue)
+            {
+                ThreadPool.SetMinThreads(minThreadCount, 1);
+                ThreadPool.SetMaxThreads(maxThreadCount, 2);
+            }
+
+            public void Submit(Action p)
+            {
+                lock (this)
+                {
+                    taskCount++;
+                }
+                ThreadPool.QueueUserWorkItem(new WaitCallback(TaskCallBack), p);
+            }
+
+            private void TaskCallBack(Object action)
+            {
+                ((Action)action).Invoke();
+                lock (this)
+                {
+                    completedTaskCount++;
+                }
+            }
+
+            public int GetTaskCount()
+            {
+                return taskCount;
+            }
+
+            public int GetCompletedTaskCount()
+            {
+                return completedTaskCount;
+            }
+
+            public void Shutdown()
+            {
+                // nothing to do
+            }
+
+            public void AwaitTermination(int time, TimeUnit unit)
+            {
+                // nothing to do
+            }
+        }
+        
+        public enum TimeUnit
+        {
+        	Milliseconds
+        }
+    }
+    
 }

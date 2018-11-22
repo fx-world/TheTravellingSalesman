@@ -1,7 +1,7 @@
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Impl
+namespace TheTravelingSalesman.Impl
 {
 	public abstract class AbstractPath<T> : IPath<T>
 	{

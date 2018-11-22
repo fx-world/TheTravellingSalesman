@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using Sharpen.Concurrent;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Solvers
+namespace TheTravelingSalesman.Solvers
 {
 	public class ParallelBranchBoundSolver<T> : ISolver<T>
 	{
@@ -11,7 +13,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 
 		private ThreadPoolExecutor pool;
 
-		private BlockingQueue<Runnable> workQueue;
+		private BlockingCollection<Action> workQueue;
 
 		private volatile IPath<T> bestPath;
 
@@ -26,7 +28,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 		{
 			this.problem = problem;
 			this.threadCount = threadCount;
-			this.workQueue = new LinkedBlockingQueue<Runnable>();
+			this.workQueue = new BlockingCollection<Action>();
 			this.pool = new ThreadPoolExecutor(threadCount, threadCount, 5000, TimeUnit.Milliseconds, workQueue);
 		}
 
@@ -61,7 +63,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 
 		protected internal virtual void CalculateShortestPath(IProblem<T> problem)
 		{
-			IList<int> leftToVisit = new List<int>();
+			IList<int?> leftToVisit = new List<int?>();
 			for (int i = 0; i < problem.GetLocationsCount(); i++)
 			{
 				leftToVisit.Add(i);
@@ -69,20 +71,20 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 			CalculateShortestPath(problem, problem.CreatePath(), leftToVisit);
 		}
 
-		protected internal virtual void CalculateShortestPath(IProblem<T> problem, IPath<T> startPath, IList<int> leftToVisit)
+		protected internal virtual void CalculateShortestPath(IProblem<T> problem, IPath<T> startPath, IList<int?> leftToVisit)
 		{
 			if (leftToVisit.Count == 1)
 			{
-				IPath<T> path = startPath.To(leftToVisit[0]);
+				IPath<T> path = startPath.To(leftToVisit[0].Value);
 				SetBestPath(path);
 			}
 			else
 			{
 				IList<IPath<T>> nextPaths = new List<IPath<T>>();
 				IPath<T> globalBestPath = problem.GetBestPath();
-				foreach (int nextLocation in leftToVisit)
+				foreach (int? nextLocation in leftToVisit)
 				{
-					IPath<T> nextPath = startPath.To(nextLocation);
+					IPath<T> nextPath = startPath.To(nextLocation.Value);
 					//if (globalBestPath == null || nextPath.getLength() < globalBestPath.getLength()) {
 					if (nextPath.IsBetter(globalBestPath))
 					{
@@ -95,8 +97,8 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 				{
 					foreach (IPath<T> nextPath in nextPaths)
 					{
-						IList<int> newLeftToVisit = new List<int>(leftToVisit);
-						int nextLocation = nextPath.GetLast();
+						IList<int?> newLeftToVisit = new List<int?>(leftToVisit);
+						int? nextLocation = nextPath.GetLast();
 						newLeftToVisit.Remove(nextLocation);
 						pool.Submit(() => CalculateShortestPath(problem, nextPath, newLeftToVisit));
 					}
@@ -105,8 +107,8 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 				{
 					foreach (IPath<T> nextPath in nextPaths)
 					{
-						IList<int> newLeftToVisit = new List<int>(leftToVisit);
-						int nextLocation = nextPath.GetLast();
+						IList<int?> newLeftToVisit = new List<int?>(leftToVisit);
+						int? nextLocation = nextPath.GetLast();
 						newLeftToVisit.Remove(nextLocation);
 						CalculateShortestPath(problem, nextPath, newLeftToVisit);
 					}

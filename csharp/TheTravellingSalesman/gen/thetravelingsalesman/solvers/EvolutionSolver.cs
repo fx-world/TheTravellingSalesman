@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman;
 using Sharpen;
+using TheTravelingSalesman;
 
-namespace DE.Fxworld.Thetravelingsalesman.Solvers
+namespace TheTravelingSalesman.Solvers
 {
 	public class EvolutionSolver<T> : ISolver<T>
 	{
@@ -65,7 +66,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 				population.Sort();
 				while (population.Count > populationCount)
 				{
-					population.RemoveAtReturningValue(population.Count - 1);
+					population.GetAndRemove(population.Count - 1);
 				}
 				IPath<T> best = population[0];
 				if (best.IsBetter(result))
@@ -108,7 +109,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 		private IPath<T> CreateRandom()
 		{
 			int[] result = new int[problem.GetLocationsCount()];
-			IList<int> locations = new List<int>();
+			IList<int?> locations = new List<int?>();
 			for (int i = 0; i < problem.GetLocationsCount(); i++)
 			{
 				locations.Add(i);
@@ -116,7 +117,7 @@ namespace DE.Fxworld.Thetravelingsalesman.Solvers
 			for (int i = 0; i < result.Length; i++)
 			{
 				int l = random.Next(locations.Count);
-				result[i] = locations.RemoveAtReturningValue(l);
+				result[i] = locations.GetAndRemove(l).Value;
 			}
 			return problem.CreatePath(result);
 		}

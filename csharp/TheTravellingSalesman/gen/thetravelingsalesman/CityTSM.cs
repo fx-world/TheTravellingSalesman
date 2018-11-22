@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using DE.Fxworld.Thetravelingsalesman.Solvers;
 using Sharpen;
+using TheTravelingSalesman.Solvers;
 
-namespace DE.Fxworld.Thetravelingsalesman
+namespace TheTravelingSalesman
 {
 	public class CityTSM
 	{
@@ -49,7 +49,7 @@ namespace DE.Fxworld.Thetravelingsalesman
 			{
 				cities.Add(new CityTSM.City(this, "City " + i, rand.NextDouble() * 0, rand.NextDouble() * 14));
 			}
-			problem = ProblemBuilder.Create<CityTSM.City>().Locations(cities).Distances((CityTSM.City c1, CityTSM.City c2) => DistFrom(c1.lat, c1.lon, c2.lat, c2.lon)).BuildIntegerArray();
+			problem = new ProblemBuilder<CityTSM.City>(typeof(CityTSM.City)).Locations(cities).Distances((CityTSM.City c1, CityTSM.City c2) => DistFrom(c1.lat, c1.lon, c2.lat, c2.lon)).BuildIntegerArray();
 		}
 
 		public virtual void Run()
@@ -66,7 +66,7 @@ namespace DE.Fxworld.Thetravelingsalesman
 		protected internal virtual void TestSolvers(ISolver<CityTSM.City> solver)
 		{
 			long from = Runtime.CurrentTimeMillis();
-			IPath path = solver.Solve();
+			IPath<CityTSM.City> path = solver.Solve();
 			long to = Runtime.CurrentTimeMillis();
 			System.Console.Out.WriteLine(solver.ToString());
 			System.Console.Out.WriteLine("\ttime=" + (to - from));
@@ -77,9 +77,9 @@ namespace DE.Fxworld.Thetravelingsalesman
 		{
 			double earthRadius = 6371000;
 			//meters
-			double dLat = Math.ToRadians(lat2 - lat1);
-			double dLng = Math.ToRadians(lng2 - lng1);
-			double a = System.Math.Sin(dLat / 2) * System.Math.Sin(dLat / 2) + System.Math.Cos(Math.ToRadians(lat1)) * System.Math.Cos(Math.ToRadians(lat2)) * System.Math.Sin(dLng / 2) * System.Math.Sin(dLng / 2);
+			double dLat = Sharpen.JavaMath.ToRadians(lat2 - lat1);
+			double dLng = Sharpen.JavaMath.ToRadians(lng2 - lng1);
+			double a = System.Math.Sin(dLat / 2) * System.Math.Sin(dLat / 2) + System.Math.Cos(Sharpen.JavaMath.ToRadians(lat1)) * System.Math.Cos(Sharpen.JavaMath.ToRadians(lat2)) * System.Math.Sin(dLng / 2) * System.Math.Sin(dLng / 2);
 			double c = 2 * System.Math.Atan2(System.Math.Sqrt(a), System.Math.Sqrt(1 - a));
 			double dist = (float)(earthRadius * c);
 			return dist;

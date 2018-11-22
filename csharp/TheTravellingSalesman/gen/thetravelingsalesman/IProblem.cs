@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Sharpen;
 
-namespace DE.Fxworld.Thetravelingsalesman
+namespace TheTravelingSalesman
 {
 	public interface IProblem<L>
 	{
