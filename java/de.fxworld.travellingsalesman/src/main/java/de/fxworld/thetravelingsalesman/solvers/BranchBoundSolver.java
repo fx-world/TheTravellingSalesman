@@ -35,7 +35,7 @@ public class BranchBoundSolver<T> implements ISolver<T> {
         IPath<T> bestPath = null;
 
         if (leftToVisit.size() == 1) {
-            bestPath = startPath.to(leftToVisit.get(0));
+            bestPath = startPath.to(leftToVisit.get(0).intValue());
 
             problem.setBestPath(bestPath);
 

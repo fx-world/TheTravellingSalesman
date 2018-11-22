@@ -25,6 +25,5 @@ namespace java
                 this.fr = fr;
             }
         }
-    }
-    
+    }    
 }

@@ -114,7 +114,7 @@ public class EvolutionSolver<T> implements ISolver<T> {
 		
 		for (int i = 0; i < result.length; i++) {
 			int l = random.nextInt(locations.size());
-			result[i] = locations.remove(l);
+			result[i] = locations.remove(l).intValue();
 		}
 		
 		return problem.createPath(result);

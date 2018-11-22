@@ -39,7 +39,7 @@ public class CityTSM {
 			cities.add(new City("City " + i, rand.nextDouble() * 0, rand.nextDouble() * 14));
 		}
 		
-		problem = ProblemBuilder.create(City.class)
+		problem = new ProblemBuilder<City>(City.class)
 			.locations(cities)
 			.distances((c1, c2) -> distFrom(c1.lat, c1.lon, c2.lat, c2.lon))
 			.buildIntegerArray();
@@ -60,7 +60,7 @@ public class CityTSM {
 	
 	protected void testSolvers(ISolver<City> solver) {
         long from = System.currentTimeMillis();
-        IPath path = solver.solve();
+        IPath<City> path = solver.solve();
         long to = System.currentTimeMillis();
 
         System.out.println(solver.toString());

@@ -62,7 +62,7 @@ public class ParallelBranchBoundSolver<T> implements ISolver<T> {
 
     protected void calculateShortestPath(IProblem<T> problem, IPath<T> startPath, List<Integer> leftToVisit) {
         if (leftToVisit.size() == 1) {
-        	IPath<T> path = startPath.to(leftToVisit.get(0));
+        	IPath<T> path = startPath.to(leftToVisit.get(0).intValue());
             setBestPath(path);
 
         } else {
@@ -70,7 +70,7 @@ public class ParallelBranchBoundSolver<T> implements ISolver<T> {
             IPath<T> globalBestPath = problem.getBestPath();
 
             for (Integer nextLocation : leftToVisit) {
-            	IPath<T> nextPath = startPath.to(nextLocation);
+            	IPath<T> nextPath = startPath.to(nextLocation.intValue());
 
                 //if (globalBestPath == null || nextPath.getLength() < globalBestPath.getLength()) {
             	if (nextPath.isBetter(globalBestPath)) {

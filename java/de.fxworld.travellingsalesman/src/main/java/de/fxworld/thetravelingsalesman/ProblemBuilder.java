@@ -10,12 +10,14 @@ public class ProblemBuilder<T> {
 	private BiFunction<T, T, Double> distanceCalc;
 	private int intMultiplicator = 1;
 	private int fixedFirstLocation = -1;
+	private Class<T> clazz;
 	
-	private ProblemBuilder() {		
+	public ProblemBuilder(Class<T> clazz) {
+		this.clazz = clazz;
 	}
 	
-	public static <T> ProblemBuilder<T> create(Class<T> clazz) {
-		return new ProblemBuilder<T>();
+	public static <V> ProblemBuilder<V> create(Class<V> clazz) {
+		return new ProblemBuilder<V>(clazz);
 	}
 
 	public ProblemBuilder<T> locations(List<T> locations) {

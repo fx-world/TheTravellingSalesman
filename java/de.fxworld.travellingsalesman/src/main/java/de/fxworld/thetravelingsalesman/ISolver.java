@@ -2,6 +2,6 @@ package de.fxworld.thetravelingsalesman;
 
 public interface ISolver<T> {
 
-    IPath solve();
+    IPath<T> solve();
     IProblem<T> getProblem();
 }
