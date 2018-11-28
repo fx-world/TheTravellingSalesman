@@ -1,4 +1,5 @@
 using Sharpen;
+using System.Collections.Generic;
 using TheTravelingSalesman;
 
 namespace TheTravelingSalesman.Impl
@@ -48,15 +49,16 @@ namespace TheTravelingSalesman.Impl
 			this.length = length;
 		}
 
-		public override string ToString()
-		{
-			return "Path [locations=" + Sharpen.Arrays.ToString(locations) + ", length=" + length + "]";
-		}
+        public override string ToString()
+        {
+            IList<T> originalLocations = problem.GetLocations(locations);
+            return "Path [locations=" + string.Join(", ", originalLocations) + ", length=" + length + "]";
+        }
 
-		/* (non-Javadoc)
+        /* (non-Javadoc)
 		* @see de.fxworld.thetravelingsalesman.impl.IPath#compareTo(de.fxworld.thetravelingsalesman.impl.Path)
 		*/
-		public override int CompareTo(IPath<T> o)
+        public override int CompareTo(IPath<T> o)
 		{
 			return JavaMath.Compare(GetLength(), ((IntegerPath<T>)o).GetLength());
 		}

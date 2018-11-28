@@ -22,5 +22,7 @@ namespace TheTravelingSalesman
 		IPath<L> CreatePath();
 
 		void SetFixedFirstLocation(int fixedFirstLocation);
-	}
+
+        IList<L> GetLocations(int[] locations);
+    }
 }

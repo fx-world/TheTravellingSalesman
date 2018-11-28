@@ -48,7 +48,19 @@ namespace TheTravelingSalesman.Impl
 			return locations;
 		}
 
-		public virtual IPath<L> GetBestPath()
+        public virtual IList<L> GetLocations(int[] intLocations)
+        {
+            IList<L> result = new List<L>();
+
+            for (int i = 0; i < intLocations.Length; i++)
+            {
+                result.Add(locations[intLocations[i]]);
+            }
+
+            return result;
+        }
+
+        public virtual IPath<L> GetBestPath()
 		{
 			return bestPath;
 		}
