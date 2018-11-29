@@ -40,6 +40,12 @@ namespace TheTravelingSalesman
 			return this;
 		}
 
+        public virtual ProblemBuilder<T> FixedFirstLocation(int index)
+        {
+            this.fixedFirstLocation = index;
+            return this;
+        }
+
 		public virtual IProblem<T> BuildDoubleArray()
 		{
 			return BuildDoubleProblem((IList<T> locations, double[][] dist) => new DoubleArrayProblem<T>(locations, dist));
