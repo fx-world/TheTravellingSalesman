@@ -14,9 +14,11 @@ namespace TheTravelingSalesman
 
 		private int intMultiplicator = 1;
 
-		private int fixedFirstLocation = -1;
+		private int fixedFirstLocationIndex = -1;
 
-		private Type clazz;
+        private T fixedFirstLocation;
+
+        private Type clazz;
 
 		public ProblemBuilder(Type clazz)
 		{
@@ -42,11 +44,17 @@ namespace TheTravelingSalesman
 
         public virtual ProblemBuilder<T> FixedFirstLocation(int index)
         {
-            this.fixedFirstLocation = index;
+            this.fixedFirstLocationIndex = index;
             return this;
         }
 
-		public virtual IProblem<T> BuildDoubleArray()
+        public virtual ProblemBuilder<T> FixedFirstLocation(T start)
+        {
+            this.fixedFirstLocation = start;
+            return this;
+        }
+
+        public virtual IProblem<T> BuildDoubleArray()
 		{
 			return BuildDoubleProblem((IList<T> locations, double[][] dist) => new DoubleArrayProblem<T>(locations, dist));
 		}
@@ -68,7 +76,7 @@ namespace TheTravelingSalesman
 				}
 			}
 			IProblem<T> result = creator.Invoke(locations__, dist);
-			result.SetFixedFirstLocation(fixedFirstLocation);
+			result.SetFixedFirstLocation(fixedFirstLocationIndex);
 			return result;
 		}
 
@@ -84,6 +92,16 @@ namespace TheTravelingSalesman
 
 		public virtual IProblem<T> BuildIntegerArray(BiFunction<IList<T>, int[][], IProblem<T>> creator)
 		{
+            if (fixedFirstLocation != null && !locations__.Contains(fixedFirstLocation))
+            {
+                locations__.Add(0, fixedFirstLocation);
+                fixedFirstLocationIndex = 0;
+            } 
+            else if (fixedFirstLocation != null && locations__.Contains(fixedFirstLocation))
+            {
+                fixedFirstLocationIndex = locations__.IndexOf(fixedFirstLocation);
+            }
+
 			int[][] dist = new int[locations__.Count][];
 			for (int i = 0; i < locations__.Count; i++)
 			{
@@ -94,7 +112,7 @@ namespace TheTravelingSalesman
 				}
 			}
 			IProblem<T> result = creator.Invoke(locations__, dist);
-			result.SetFixedFirstLocation(fixedFirstLocation);
+			result.SetFixedFirstLocation(fixedFirstLocationIndex);
 			return result;
 		}
 

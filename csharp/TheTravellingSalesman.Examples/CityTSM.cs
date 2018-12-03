@@ -7,8 +7,6 @@ namespace TheTravellingSalesman.Examples
 {
 	public class CityTSM
 	{
-		private IProblem<City> problem;
-
         public class City
         {
             internal string name;
@@ -39,7 +37,7 @@ namespace TheTravellingSalesman.Examples
 			cities.Add(new City("Berlin", 52.520008, 13.404954));
 			cities.Add(new City("Munich", 48.137154, 11.576124));
 
-			problem = new ProblemBuilder<City>(typeof(City))
+            IProblem<City> problem = new ProblemBuilder<City>(typeof(City))
                 .Locations(cities)
                 .Distances((City c1, City c2) => DistFrom(c1.lat, c1.lon, c2.lat, c2.lon))
                 .FixedFirstLocation(0)

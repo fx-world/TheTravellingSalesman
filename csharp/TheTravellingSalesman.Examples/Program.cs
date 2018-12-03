@@ -10,6 +10,12 @@ namespace TheTravellingSalesman.Examples
             Console.WriteLine("Hello Travelling Salesman.");
             new CityTSM();
 
+            if (args.Length > 0)
+            {
+                new CableRoutingTSM().Run(args[0]);
+            }
+            
+
             Console.WriteLine("Press ESC to close");
             do
             {

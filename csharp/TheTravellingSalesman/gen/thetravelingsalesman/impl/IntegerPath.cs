@@ -39,7 +39,10 @@ namespace TheTravelingSalesman.Impl
 		{
 			if (length == int.MinValue)
 			{
-				problem.CalculateLengths(System.Linq.Enumerable.ToList(new IPath<T>[] {this}));
+                IList<IPath<T>> list = new List<IPath<T>>(1);
+                list.Add(this);
+
+                problem.CalculateLengths(list);
 			}
 			return length;
 		}

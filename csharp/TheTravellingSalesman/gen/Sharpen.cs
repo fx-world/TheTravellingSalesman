@@ -457,7 +457,7 @@ namespace Sharpen {
             private int taskCount;
             private int completedTaskCount;
 
-            public ThreadPoolExecutor(int minThreadCount, int maxThreadCount, int v, object milliseconds, BlockingCollection<Action> workQueue)
+            public ThreadPoolExecutor(int minThreadCount, int maxThreadCount, int v, object milliseconds)
             {
                 ThreadPool.SetMinThreads(minThreadCount, 1);
                 ThreadPool.SetMaxThreads(maxThreadCount, 2);
